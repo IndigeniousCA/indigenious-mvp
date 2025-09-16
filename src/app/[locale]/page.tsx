@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/Button';
 import { StatCard } from '@/components/ui/Card';
 import { useTranslations } from 'next-intl';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { Link } from '@/i18n/routing';
+import { Navigation } from '@/components/layout/Navigation';
 
 export default function Home() {
   const t = useTranslations();
@@ -15,14 +16,7 @@ export default function Home() {
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         
         {/* Navigation */}
-        <nav className="flex justify-between items-center mb-16 glass rounded-full px-8 py-4">
-          <h1 className="text-2xl font-bold text-gradient">{t('navigation.brandName')}</h1>
-          <div className="flex gap-4 items-center">
-            <LanguageSwitcher />
-            <Button variant="secondary" size="sm">{t('navigation.signIn')}</Button>
-            <Button variant="primary" size="sm">{t('navigation.getStarted')}</Button>
-          </div>
-        </nav>
+        <Navigation />
 
         {/* Hero Section */}
         <section className="text-center mb-20">
@@ -37,12 +31,16 @@ export default function Home() {
           
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
-            <Button variant="primary" size="lg" className="text-lg px-8 py-4">
-              {t('hero.cta.joinBusiness')}
-            </Button>
-            <Button variant="secondary" size="lg" className="text-lg px-8 py-4">
-              {t('hero.cta.findPartners')}
-            </Button>
+            <Link href="/auth/register">
+              <Button variant="primary" size="lg" className="text-lg px-8 py-4">
+                {t('hero.cta.joinBusiness')}
+              </Button>
+            </Link>
+            <Link href="/search">
+              <Button variant="secondary" size="lg" className="text-lg px-8 py-4">
+                {t('hero.cta.findPartners')}
+              </Button>
+            </Link>
           </div>
 
           {/* Warning Banner */}

@@ -1,9 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
-import Link from 'next/link';
+import { Link, useRouter } from '@/i18n/routing';
 import { AuthForm, InputField, CheckboxField } from '@/components/auth/AuthForm';
 import { 
   validateLoginForm, 
@@ -64,7 +63,7 @@ export default function LoginPage() {
         showToast(result.message, 'success');
         // Redirect after 1 second
         setTimeout(() => {
-          router.push(`/${locale}`);
+          router.push('/dashboard');
         }, 1000);
       } else {
         setError(result.message);
@@ -158,7 +157,7 @@ export default function LoginPage() {
       {/* Register Link */}
       <div className="text-center text-sm text-gray-400">
         {translations.noAccount}{' '}
-        <Link href={`/${locale}/auth/register`} className="text-primary-start hover:text-primary-end transition-colors font-medium">
+        <Link href="/auth/register" className="text-primary-start hover:text-primary-end transition-colors font-medium">
           {translations.register}
         </Link>
       </div>
