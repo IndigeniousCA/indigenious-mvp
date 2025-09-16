@@ -1,0 +1,20 @@
+
+> indigenious_mvp@1.0.0 dev
+> next dev
+
+   ▲ Next.js 15.5.3
+   - Local:        http://localhost:3001
+   - Network:      http://192.0.0.2:3001
+   - Environments: .env.local, .env
+
+ ✓ Starting...
+ ✓ Ready in 982ms
+ ✓ Compiled /middleware in 247ms (198 modules)
+ ○ Compiling /[locale] ...
+ ✓ Compiled /[locale] in 1155ms (748 modules)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /[locale]. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /[locale]. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ GET /en 404 in 1559ms
+[?25h
