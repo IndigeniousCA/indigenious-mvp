@@ -38,6 +38,9 @@ export const Button: React.FC<ButtonProps> = ({
         active:scale-95
         disabled:active:scale-100
         select-none
+        inline-flex
+        items-center
+        justify-center
         ${className}
       `}
       {...props}
