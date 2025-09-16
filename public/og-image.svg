@@ -1,0 +1,54 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Mesh gradient overlay -->
+  <rect width="1200" height="630" fill="url(#meshGradient)" opacity="0.3"/>
+  
+  <!-- Logo Symbol -->
+  <g transform="translate(550, 180)">
+    <circle cx="50" cy="50" r="48" fill="url(#logoGradient)" stroke="white" stroke-width="4" opacity="0.9"/>
+    <path d="M50 20L65 35L50 50L35 35L50 20Z" fill="white" opacity="0.95"/>
+    <path d="M50 50L65 65L50 80L35 65L50 50Z" fill="white" opacity="0.85"/>
+    <path d="M20 50L35 35V65L20 50Z" fill="white" opacity="0.75"/>
+    <path d="M80 50L65 35V65L80 50Z" fill="white" opacity="0.75"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="600" y="340" font-family="Arial, sans-serif" font-size="72" font-weight="bold" text-anchor="middle" fill="white">
+    Indigenious
+  </text>
+  
+  <text x="600" y="400" font-family="Arial, sans-serif" font-size="28" text-anchor="middle" fill="white" opacity="0.9">
+    Connect. Verify. Prosper.
+  </text>
+  
+  <text x="600" y="450" font-family="Arial, sans-serif" font-size="20" text-anchor="middle" fill="white" opacity="0.7">
+    Canada's Indigenous Business Network
+  </text>
+  
+  <!-- Bottom decoration -->
+  <rect x="450" y="500" width="300" height="4" fill="url(#logoGradient)" opacity="0.8"/>
+  
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A0B0F"/>
+      <stop offset="0.5" stop-color="#1A1B2F"/>
+      <stop offset="1" stop-color="#0F1419"/>
+    </linearGradient>
+    
+    <!-- Logo gradient -->
+    <linearGradient id="logoGradient" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#667EEA"/>
+      <stop offset="1" stop-color="#764BA2"/>
+    </linearGradient>
+    
+    <!-- Mesh gradient -->
+    <radialGradient id="meshGradient" cx="0.5" cy="0.5" r="0.8">
+      <stop offset="0%" stop-color="#667EEA" stop-opacity="0.2"/>
+      <stop offset="50%" stop-color="#764BA2" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#4ECDC4" stop-opacity="0.05"/>
+    </radialGradient>
+  </defs>
+</svg>

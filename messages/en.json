@@ -1,0 +1,41 @@
+{
+  "navigation": {
+    "brandName": "Indigenious",
+    "signIn": "Sign In",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "title": {
+      "connect": "Connect.",
+      "verify": "Verify.",
+      "prosper": "Prosper."
+    },
+    "subtitle": "The definitive Indigenous business verification platform",
+    "cta": {
+      "joinBusiness": "Join as Indigenous Business",
+      "findPartners": "Find Partners"
+    },
+    "warning": "FALSE CLAIMS = LIFETIME BAN"
+  },
+  "stats": {
+    "businesses": {
+      "value": "400K+",
+      "label": "Businesses"
+    },
+    "procurement": {
+      "value": "$1.6B",
+      "label": "Procurement"
+    },
+    "verified": {
+      "value": "100%",
+      "label": "Verified"
+    }
+  },
+  "features": {
+    "title": "Empowering Indigenous Business Excellence",
+    "description": "Join thousands of verified Indigenous businesses accessing exclusive opportunities, building trusted partnerships, and driving economic sovereignty forward."
+  },
+  "footer": {
+    "copyright": "© 2024 Indigenious. Building bridges, honoring heritage."
+  }
+}

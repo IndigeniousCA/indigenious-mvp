@@ -1,0 +1,41 @@
+{
+  "navigation": {
+    "brandName": "Indigenious",
+    "signIn": "Se connecter",
+    "getStarted": "Commencer"
+  },
+  "hero": {
+    "title": {
+      "connect": "Connecter.",
+      "verify": "Vérifier.",
+      "prosper": "Prospérer."
+    },
+    "subtitle": "La plateforme définitive de vérification des entreprises autochtones",
+    "cta": {
+      "joinBusiness": "Joindre comme entreprise autochtone",
+      "findPartners": "Trouver des partenaires"
+    },
+    "warning": "FAUSSES DÉCLARATIONS = BANNISSEMENT À VIE"
+  },
+  "stats": {
+    "businesses": {
+      "value": "400K+",
+      "label": "Entreprises"
+    },
+    "procurement": {
+      "value": "1,6G$",
+      "label": "Approvisionnement"
+    },
+    "verified": {
+      "value": "100%",
+      "label": "Vérifiées"
+    }
+  },
+  "features": {
+    "title": "Favoriser l'excellence des entreprises autochtones",
+    "description": "Rejoignez des milliers d'entreprises autochtones vérifiées accédant à des opportunités exclusives, établissant des partenariats de confiance et faisant progresser la souveraineté économique."
+  },
+  "footer": {
+    "copyright": "© 2024 Indigenious. Bâtir des ponts, honorer l'héritage."
+  }
+}
