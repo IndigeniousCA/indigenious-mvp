@@ -5,7 +5,6 @@ import {locales} from '@/i18n';
 import type { Metadata } from 'next';
 import { ServiceWorkerRegistration } from '@/components/ServiceWorkerRegistration';
 import { ToastProvider } from '@/components/ui/ToastContainer';
-import '../globals.css';
 
 export async function generateMetadata({
   params
