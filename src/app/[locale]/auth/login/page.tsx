@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
-import { Link, useRouter } from '@/i18n/routing';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { AuthForm, InputField, CheckboxField } from '@/components/auth/AuthForm';
+import { AuthService } from '@/lib/services/auth.service';
 import { 
   validateLoginForm, 
   LoginFormData, 
-  ValidationError,
-  mockLogin 
+  ValidationError
 } from '@/lib/auth';
 import { useToast } from '@/components/ui/ToastContainer';
 
@@ -28,6 +29,8 @@ export default function LoginPage() {
     password: '',
     rememberMe: false
   });
+  
+  const authService = new AuthService();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,16 +58,28 @@ export default function LoginPage() {
     setIsLoading(true);
     
     try {
-      // Mock login (would connect to Supabase in real implementation)
-      const result = await mockLogin(formData);
+      // Use real auth service
+      const result = await authService.login(formData);
       
       if (result.success) {
         setSuccess(result.message);
         showToast(result.message, 'success');
-        // Redirect after 1 second
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 1000);
+        
+        if (result.requiresVerification) {
+          // Store user data for verification step
+          sessionStorage.setItem('pendingUserId', result.user?.id || '');
+          sessionStorage.setItem('pendingUserEmail', formData.email);
+          
+          // Redirect to verification page
+          setTimeout(() => {
+            router.push(`/${locale}/auth/verify`);
+          }, 1000);
+        } else {
+          // Redirect to dashboard
+          setTimeout(() => {
+            router.push(`/${locale}/dashboard`);
+          }, 1000);
+        }
       } else {
         setError(result.message);
         showToast(result.message, 'error');
@@ -137,7 +152,7 @@ export default function LoginPage() {
         />
         
         <Link 
-          href="#" 
+          href={`/${locale}/auth/forgot-password`} 
           className="text-sm text-primary-start hover:text-primary-end transition-colors"
         >
           {translations.forgotPassword}
@@ -157,7 +172,7 @@ export default function LoginPage() {
       {/* Register Link */}
       <div className="text-center text-sm text-gray-400">
         {translations.noAccount}{' '}
-        <Link href="/auth/register" className="text-primary-start hover:text-primary-end transition-colors font-medium">
+        <Link href={`/${locale}/auth/register`} className="text-primary-start hover:text-primary-end transition-colors font-medium">
           {translations.register}
         </Link>
       </div>

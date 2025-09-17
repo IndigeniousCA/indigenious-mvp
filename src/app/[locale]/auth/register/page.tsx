@@ -5,11 +5,12 @@ import { useRouter } from 'next/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import { AuthForm, InputField, SelectField, CheckboxField } from '@/components/auth/AuthForm';
+import { UserTypeSelector } from '@/components/auth/UserTypeSelector';
+import { AuthService } from '@/lib/services/auth.service';
 import { 
   validateRegistrationForm, 
   RegisterFormData, 
   ValidationError,
-  mockRegister,
   formatPhoneNumber 
 } from '@/lib/auth';
 import { useToast } from '@/components/ui/ToastContainer';
@@ -24,6 +25,8 @@ export default function RegisterPage() {
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [userType, setUserType] = useState<'indigenous_business' | 'canadian_business' | null>(null);
+  const [showPaymentStep, setShowPaymentStep] = useState(false);
   
   const [formData, setFormData] = useState<RegisterFormData>({
     email: '',
@@ -34,11 +37,36 @@ export default function RegisterPage() {
     termsAccepted: false
   });
 
+  const authService = new AuthService();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccess('');
     setFieldErrors({});
+
+    // Check if user type is selected
+    if (!userType) {
+      showToast(
+        locale === 'fr' 
+          ? 'Veuillez sélectionner votre type de compte' 
+          : 'Please select your account type',
+        'error'
+      );
+      return;
+    }
+
+    // Check if Canadian business needs payment info
+    if (userType === 'canadian_business' && !showPaymentStep) {
+      setShowPaymentStep(true);
+      showToast(
+        locale === 'fr' 
+          ? 'Une carte de crédit est requise pour les entreprises canadiennes' 
+          : 'Credit card is required for Canadian businesses',
+        'info'
+      );
+      return;
+    }
 
     // Validate form
     const errors = validateRegistrationForm(formData);
@@ -60,16 +88,31 @@ export default function RegisterPage() {
     setIsLoading(true);
     
     try {
-      // Mock registration (would connect to Supabase in real implementation)
-      const result = await mockRegister(formData);
+      // Use real auth service
+      const result = await authService.register({
+        ...formData,
+        userType: userType
+      });
       
       if (result.success) {
         setSuccess(result.message);
         showToast(result.message, 'success');
-        // Redirect after 2 seconds
-        setTimeout(() => {
-          router.push(`/${locale}/auth/login`);
-        }, 2000);
+        
+        if (result.requiresVerification) {
+          // Store user data for verification step
+          sessionStorage.setItem('pendingUserId', result.user?.id || '');
+          sessionStorage.setItem('pendingUserEmail', formData.email);
+          
+          // Redirect to verification page
+          setTimeout(() => {
+            router.push(`/${locale}/auth/verify`);
+          }, 1500);
+        } else {
+          // Redirect to dashboard
+          setTimeout(() => {
+            router.push(`/${locale}/dashboard`);
+          }, 1500);
+        }
       } else {
         setError(result.message);
         showToast(result.message, 'error');
@@ -105,9 +148,15 @@ export default function RegisterPage() {
     termsText: locale === 'fr' ? 
       'J\'accepte les conditions d\'utilisation et je comprends que les fausses déclarations entraîneront un bannissement permanent' : 
       'I accept the terms and conditions and understand that false claims will result in a permanent ban',
+    termsLink: locale === 'fr' ? 'conditions d\'utilisation' : 'terms and conditions',
+    privacyLink: locale === 'fr' ? 'politique de confidentialité' : 'privacy policy',
     submitText: locale === 'fr' ? 'Créer mon compte' : 'Create Account',
+    addPaymentText: locale === 'fr' ? 'Ajouter les informations de paiement' : 'Add Payment Information',
     hasAccount: locale === 'fr' ? 'Vous avez déjà un compte?' : 'Already have an account?',
-    signIn: locale === 'fr' ? 'Se connecter' : 'Sign in'
+    signIn: locale === 'fr' ? 'Se connecter' : 'Sign in',
+    paymentNote: locale === 'fr' 
+      ? 'Les entreprises canadiennes doivent fournir une carte de crédit pour accéder à la plateforme.'
+      : 'Canadian businesses must provide a credit card to access the platform.'
   };
 
   return (
@@ -115,88 +164,135 @@ export default function RegisterPage() {
       title={translations.title}
       subtitle={translations.subtitle}
       onSubmit={handleSubmit}
-      submitText={translations.submitText}
+      submitText={showPaymentStep ? translations.addPaymentText : translations.submitText}
       isLoading={isLoading}
       error={error}
       success={success}
     >
-      {/* Email Field */}
-      <InputField
-        type="email"
-        label={translations.email}
-        placeholder="name@company.com"
-        value={formData.email}
-        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-        error={fieldErrors.email}
-        required
-      />
+      {/* Step 1: User Type Selection */}
+      {!userType && (
+        <UserTypeSelector
+          value={userType}
+          onChange={setUserType}
+        />
+      )}
 
-      {/* Phone Field */}
-      <InputField
-        type="tel"
-        label={translations.phone}
-        placeholder="(555) 123-4567"
-        value={formData.phone}
-        onChange={handlePhoneChange}
-        error={fieldErrors.phone}
-        required
-      />
+      {/* Step 2: Registration Form */}
+      {userType && !showPaymentStep && (
+        <>
+          {/* Email Field */}
+          <InputField
+            type="email"
+            label={translations.email}
+            placeholder="name@company.com"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            error={fieldErrors.email}
+            required
+          />
 
-      {/* Password Field */}
-      <InputField
-        type="password"
-        label={translations.password}
-        placeholder="••••••••"
-        value={formData.password}
-        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-        error={fieldErrors.password}
-        required
-      />
+          {/* Phone Field */}
+          <InputField
+            type="tel"
+            label={translations.phone}
+            placeholder="(555) 123-4567"
+            value={formData.phone}
+            onChange={handlePhoneChange}
+            error={fieldErrors.phone}
+            required
+          />
 
-      {/* Business Name Field */}
-      <InputField
-        type="text"
-        label={translations.businessName}
-        placeholder={locale === 'fr' ? 'Entreprise ABC Inc.' : 'ABC Enterprises Inc.'}
-        value={formData.businessName}
-        onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
-        error={fieldErrors.businessName}
-        required
-      />
+          {/* Password Field */}
+          <InputField
+            type="password"
+            label={translations.password}
+            placeholder="••••••••"
+            value={formData.password}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            error={fieldErrors.password}
+            required
+          />
 
-      {/* Language Preference */}
-      <SelectField
-        label={translations.languagePreference}
-        value={formData.locale}
-        onChange={(e) => setFormData({ ...formData, locale: e.target.value as 'en' | 'fr' })}
-        options={[
-          { value: 'en', label: translations.english },
-          { value: 'fr', label: translations.french }
-        ]}
-      />
+          {/* Business Name Field */}
+          <InputField
+            type="text"
+            label={translations.businessName}
+            placeholder={locale === 'fr' ? 'Entreprise ABC Inc.' : 'ABC Enterprises Inc.'}
+            value={formData.businessName}
+            onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
+            error={fieldErrors.businessName}
+            required
+          />
 
-      {/* Warning Banner */}
-      <div className="warning-banner rounded-lg px-4 py-3 text-center">
-        <p className="text-danger font-bold text-sm">
-          ⚠️ {translations.warningText}
-        </p>
-      </div>
+          {/* Language Preference */}
+          <SelectField
+            label={translations.languagePreference}
+            value={formData.locale}
+            onChange={(e) => setFormData({ ...formData, locale: e.target.value as 'en' | 'fr' })}
+            options={[
+              { value: 'en', label: translations.english },
+              { value: 'fr', label: translations.french }
+            ]}
+          />
 
-      {/* Terms Checkbox */}
-      <CheckboxField
-        label={translations.termsText}
-        checked={formData.termsAccepted}
-        onChange={(e) => setFormData({ ...formData, termsAccepted: e.target.checked })}
-        error={fieldErrors.termsAccepted}
-      />
+          {/* Warning Banner for Indigenous businesses */}
+          {userType === 'indigenous_business' && (
+            <div className="warning-banner rounded-lg px-4 py-3 text-center">
+              <p className="text-danger font-bold text-sm">
+                ⚠️ {translations.warningText}
+              </p>
+            </div>
+          )}
+
+          {/* Terms Checkbox */}
+          <CheckboxField
+            label={
+              <>
+                {locale === 'fr' ? 'J\'accepte les ' : 'I accept the '}
+                <Link href={`/${locale}/legal/terms`} className="text-primary-start hover:text-primary-end">
+                  {translations.termsLink}
+                </Link>
+                {locale === 'fr' ? ' et la ' : ' and '}
+                <Link href={`/${locale}/legal/privacy`} className="text-primary-start hover:text-primary-end">
+                  {translations.privacyLink}
+                </Link>
+              </>
+            }
+            checked={formData.termsAccepted}
+            onChange={(e) => setFormData({ ...formData, termsAccepted: e.target.checked })}
+            error={fieldErrors.termsAccepted}
+          />
+        </>
+      )}
+
+      {/* Step 3: Payment Information (for Canadian businesses) */}
+      {showPaymentStep && (
+        <div className="space-y-4">
+          <div className="bg-warning/10 border border-warning/30 rounded-lg p-4">
+            <p className="text-sm text-warning">
+              💳 {translations.paymentNote}
+            </p>
+          </div>
+          <div className="text-center py-8">
+            <p className="text-gray-400 mb-4">
+              {locale === 'fr' 
+                ? 'Redirection vers Stripe pour le paiement sécurisé...' 
+                : 'Redirecting to Stripe for secure payment...'}
+            </p>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-start mx-auto"></div>
+          </div>
+        </div>
+      )}
 
       {/* Login Link */}
-      <div className="text-center text-sm text-gray-400">
-        {translations.hasAccount}{' '}
-        <Link href={`/${locale}/auth/login`} className="text-primary-start hover:text-primary-end transition-colors">
-          {translations.signIn}
-        </Link>
-      </div>
+      {!showPaymentStep && (
+        <div className="text-center text-sm text-gray-400">
+          {translations.hasAccount}{' '}
+          <Link href={`/${locale}/auth/login`} className="text-primary-start hover:text-primary-end transition-colors">
+            {translations.signIn}
+          </Link>
+        </div>
+      )}
     </AuthForm>
   );
 }

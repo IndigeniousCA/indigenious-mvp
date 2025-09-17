@@ -11,7 +11,7 @@ export interface AuthResponse {
 export class AuthService {
   private supabase = createClient()
 
-  async register(data: RegisterFormData & { userType: 'business' | 'buyer' }): Promise<AuthResponse> {
+  async register(data: RegisterFormData & { userType: 'indigenous_business' | 'canadian_business' }): Promise<AuthResponse> {
     try {
       // 1. Create user account
       const { data: authData, error: authError } = await this.supabase.auth.signUp({
@@ -40,32 +40,35 @@ export class AuthService {
         }
       }
 
-      // 2. Update profile with role
-      const { error: profileError } = await this.supabase
-        .from('profiles')
+      // 2. Update users table with user type
+      const { error: userError } = await this.supabase
+        .from('users')
         .update({ 
-          role: data.userType,
-          phone: data.phone 
+          user_type: data.userType,
+          phone: data.phone,
+          email: data.email,
+          preferred_language: data.locale
         })
         .eq('id', authData.user.id)
 
-      if (profileError) {
-        console.error('Profile update error:', profileError)
+      if (userError) {
+        console.error('User update error:', userError)
       }
 
-      // 3. Create business profile if business user
-      if (data.userType === 'business') {
-        const { error: businessError } = await this.supabase
-          .from('businesses')
-          .insert({
-            user_id: authData.user.id,
-            business_name: data.businessName,
-            status: 'pending'
-          })
+      // 3. Create business profile
+      const { error: businessError } = await this.supabase
+        .from('businesses')
+        .insert({
+          user_id: authData.user.id,
+          business_name: data.businessName,
+          indigenous_owned: data.userType === 'indigenous_business',
+          open_to_partnership: data.userType === 'canadian_business',
+          verification_status: 'pending',
+          requires_payment: data.userType === 'canadian_business'
+        })
 
-        if (businessError) {
-          console.error('Business creation error:', businessError)
-        }
+      if (businessError) {
+        console.error('Business creation error:', businessError)
       }
 
       // 4. Send verification code
@@ -154,13 +157,19 @@ export class AuthService {
         expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString() // 10 minutes
       })
 
-    // In production, integrate with actual email/SMS service
+    // Send via email or SMS service
     if (type === 'email') {
-      // TODO: Send email via Resend or SendGrid
-      console.log(`Email verification code ${code} would be sent to ${destination}`)
+      const emailService = new (await import('./email.service')).EmailService()
+      await emailService.sendVerificationCode(destination, code)
     } else {
       // TODO: Send SMS via Twilio
       console.log(`SMS verification code ${code} would be sent to ${destination}`)
+      // For MVP, we can send SMS codes via email as a fallback
+      const userEmail = await this.getUserEmail(userId)
+      if (userEmail) {
+        const emailService = new (await import('./email.service')).EmailService()
+        await emailService.sendVerificationCode(userEmail, code)
+      }
     }
   }
 
@@ -207,5 +216,15 @@ export class AuthService {
       .single()
 
     return data
+  }
+
+  private async getUserEmail(userId: string): Promise<string | null> {
+    const { data } = await this.supabase
+      .from('users')
+      .select('email')
+      .eq('id', userId)
+      .single()
+    
+    return data?.email || null
   }
 }
