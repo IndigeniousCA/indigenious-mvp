@@ -19,21 +19,21 @@
   },
   "stats": {
     "businesses": {
-      "value": "400K+",
-      "label": "Businesses"
+      "value": "Rapidly",
+      "label": "Growing Network"
     },
     "procurement": {
-      "value": "$1.6B",
-      "label": "Procurement"
+      "value": "Verified",
+      "label": "Indigenous Businesses"
     },
     "verified": {
-      "value": "100%",
-      "label": "Verified"
+      "value": "Government",
+      "label": "Compliant"
     }
   },
   "features": {
     "title": "Empowering Indigenous Business Excellence",
-    "description": "Join thousands of verified Indigenous businesses accessing exclusive opportunities, building trusted partnerships, and driving economic sovereignty forward."
+    "description": "Join tens of thousands of Canadian businesses already finding partners through our trusted platform."
   },
   "footer": {
     "copyright": "© 2024 Indigenious. Building bridges, honoring heritage."

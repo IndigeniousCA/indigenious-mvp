@@ -7,6 +7,7 @@
     --background-start-rgb: 10, 11, 15;
     --background-middle-rgb: 26, 27, 47;
     --background-end-rgb: 15, 20, 25;
+    --color-warning: #F59E0B;
   }
 
   * {
@@ -170,6 +171,10 @@
 }
 
 @layer utilities {
+  .text-warning {
+    color: var(--color-warning);
+  }
+  
   .animate-mesh {
     background-size: 400% 400%;
     animation: gradient-shift 15s ease infinite;

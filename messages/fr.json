@@ -19,21 +19,21 @@
   },
   "stats": {
     "businesses": {
-      "value": "400K+",
-      "label": "Entreprises"
+      "value": "Croissance",
+      "label": "Rapide du Réseau"
     },
     "procurement": {
-      "value": "1,6G$",
-      "label": "Approvisionnement"
+      "value": "Entreprises",
+      "label": "Autochtones Vérifiées"
     },
     "verified": {
-      "value": "100%",
-      "label": "Vérifiées"
+      "value": "Conforme au",
+      "label": "Gouvernement"
     }
   },
   "features": {
     "title": "Favoriser l'excellence des entreprises autochtones",
-    "description": "Rejoignez des milliers d'entreprises autochtones vérifiées accédant à des opportunités exclusives, établissant des partenariats de confiance et faisant progresser la souveraineté économique."
+    "description": "Rejoignez des dizaines de milliers d'entreprises canadiennes qui trouvent déjà des partenaires grâce à notre plateforme de confiance."
   },
   "footer": {
     "copyright": "© 2024 Indigenious. Bâtir des ponts, honorer l'héritage."
