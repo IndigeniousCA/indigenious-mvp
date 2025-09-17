@@ -12,14 +12,17 @@ CREATE TABLE public.users (
   id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
   email VARCHAR(255) UNIQUE NOT NULL,
   phone VARCHAR(20),
-  locale VARCHAR(2) DEFAULT 'en' CHECK (locale IN ('en', 'fr')),
+  preferred_language VARCHAR(2) DEFAULT 'en' CHECK (preferred_language IN ('en', 'fr')),
   user_type user_type NOT NULL,
   
   -- Different card requirements
   stripe_customer_id VARCHAR(255), -- NULL for Indigenous free tier
+  stripe_subscription_id VARCHAR(255),
   payment_method_required BOOLEAN DEFAULT false, -- FALSE for Indigenous free, TRUE for Canadian
+  has_payment_method BOOLEAN DEFAULT false,
   
   subscription_tier subscription_tier DEFAULT 'free',
+  subscription_status VARCHAR(50) DEFAULT 'active',
   subscription_expires_at TIMESTAMP,
   account_status account_status DEFAULT 'active',
   

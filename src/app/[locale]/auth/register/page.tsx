@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { AuthForm, InputField, SelectField, CheckboxField } from '@/components/auth/AuthForm';
 import { UserTypeSelector } from '@/components/auth/UserTypeSelector';
 import { AuthService } from '@/lib/services/auth.service';
+import { StripeCheckout } from '@/components/payment/StripeCheckout';
 import { 
   validateRegistrationForm, 
   RegisterFormData, 
@@ -267,21 +268,18 @@ export default function RegisterPage() {
 
       {/* Step 3: Payment Information (for Canadian businesses) */}
       {showPaymentStep && (
-        <div className="space-y-4">
-          <div className="bg-warning/10 border border-warning/30 rounded-lg p-4">
-            <p className="text-sm text-warning">
-              💳 {translations.paymentNote}
-            </p>
-          </div>
-          <div className="text-center py-8">
-            <p className="text-gray-400 mb-4">
-              {locale === 'fr' 
-                ? 'Redirection vers Stripe pour le paiement sécurisé...' 
-                : 'Redirecting to Stripe for secure payment...'}
-            </p>
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-start mx-auto"></div>
-          </div>
-        </div>
+        <StripeCheckout
+          userType="canadian_business"
+          onCancel={() => {
+            setShowPaymentStep(false);
+            showToast(
+              locale === 'fr' 
+                ? 'Configuration de paiement annulée' 
+                : 'Payment setup cancelled',
+              'info'
+            );
+          }}
+        />
       )}
 
       {/* Login Link */}
