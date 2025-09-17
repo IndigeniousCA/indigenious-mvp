@@ -25,25 +25,27 @@ export const Button: React.FC<ButtonProps> = ({
     ghost: 'text-gray-300 hover:text-white hover:bg-white/10 font-medium',
   };
 
+  const buttonClassName = [
+    sizeClasses[size],
+    variantClasses[variant],
+    'rounded-lg',
+    'transition-all',
+    'duration-300',
+    'relative',
+    'overflow-hidden',
+    'touch-manipulation',
+    'active:scale-95',
+    'disabled:active:scale-100',
+    'select-none',
+    'inline-flex',
+    'items-center',
+    'justify-center',
+    className
+  ].filter(Boolean).join(' ');
+
   return (
     <button
-      className={`
-        ${sizeClasses[size]}
-        ${variantClasses[variant]}
-        rounded-lg
-        transition-all
-        duration-300
-        relative
-        overflow-hidden
-        touch-manipulation
-        active:scale-95
-        disabled:active:scale-100
-        select-none
-        inline-flex
-        items-center
-        justify-center
-        ${className}
-      `}
+      className={buttonClassName}
       {...props}
     >
       {children}

@@ -11,16 +11,16 @@ export const Card: React.FC<CardProps> = ({
   className = '', 
   hover = true 
 }) => {
+  const cardClassName = [
+    'glass',
+    hover ? 'glass-hover' : '',
+    'rounded-xl',
+    'p-6',
+    className
+  ].filter(Boolean).join(' ');
+
   return (
-    <div
-      className={`
-        glass
-        ${hover ? 'glass-hover' : ''}
-        rounded-xl
-        p-6
-        ${className}
-      `}
-    >
+    <div className={cardClassName}>
       {children}
     </div>
   );
@@ -37,20 +37,20 @@ export const StatCard: React.FC<StatCardProps> = ({
   label, 
   className = '' 
 }) => {
+  const statCardClassName = [
+    'stat-card',
+    'rounded-xl',
+    'p-8',
+    'text-center',
+    'transition-all',
+    'duration-300',
+    'hover:scale-105',
+    'cursor-pointer',
+    className
+  ].filter(Boolean).join(' ');
+
   return (
-    <div
-      className={`
-        stat-card
-        rounded-xl
-        p-8
-        text-center
-        transition-all
-        duration-300
-        hover:scale-105
-        cursor-pointer
-        ${className}
-      `}
-    >
+    <div className={statCardClassName}>
       <h3 className="text-4xl md:text-5xl font-bold text-gradient mb-2 animate-float">
         {value}
       </h3>

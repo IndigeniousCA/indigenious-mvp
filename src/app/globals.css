@@ -175,6 +175,14 @@
     animation: gradient-shift 15s ease infinite;
   }
   
+  .bg-mesh-gradient {
+    background-image: radial-gradient(at 40% 20%, #667EEA 0px, transparent 50%),
+                      radial-gradient(at 80% 0%, #764BA2 0px, transparent 50%),
+                      radial-gradient(at 0% 50%, #4ECDC4 0px, transparent 50%),
+                      radial-gradient(at 80% 50%, #FF6B6B 0px, transparent 50%),
+                      radial-gradient(at 0% 100%, #667EEA 0px, transparent 50%);
+  }
+  
   /* Mobile optimizations */
   .touch-target {
     min-height: 44px;
@@ -254,5 +262,23 @@
       transform: translateX(0);
       opacity: 1;
     }
+  }
+  
+  @keyframes gradient-shift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
   }
 }
