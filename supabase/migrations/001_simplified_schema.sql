@@ -4,7 +4,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- User types
 CREATE TYPE user_type AS ENUM ('indigenous_business', 'canadian_business', 'government_verifier', 'admin');
 CREATE TYPE account_status AS ENUM ('active', 'suspended', 'banned', 'pending_verification');
-CREATE TYPE verification_status AS ENUM ('unverified', 'self_declared', 'verified', 'rejected');
+CREATE TYPE verification_status AS ENUM ('unverified', 'self_declared', 'verified', 'rejected', 'banned');
 CREATE TYPE subscription_tier AS ENUM ('free', 'growth', 'professional', 'enterprise');
 
 -- Simplified users table

@@ -1,12 +1,17 @@
+-- Clean up any existing types and tables
+DROP TYPE IF EXISTS user_type CASCADE;
+DROP TYPE IF EXISTS account_status CASCADE;
+DROP TYPE IF EXISTS verification_status CASCADE;
+DROP TYPE IF EXISTS subscription_tier CASCADE;
+
 -- Enable necessary extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- User types
+-- User types (FIXED: added 'banned' to verification_status)
 CREATE TYPE user_type AS ENUM ('indigenous_business', 'canadian_business', 'government_verifier', 'admin');
 CREATE TYPE account_status AS ENUM ('active', 'suspended', 'banned', 'pending_verification');
 CREATE TYPE verification_status AS ENUM ('unverified', 'self_declared', 'verified', 'rejected', 'banned');
 CREATE TYPE subscription_tier AS ENUM ('free', 'growth', 'professional', 'enterprise');
-
 -- Simplified users table
 CREATE TABLE public.users (
   id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
