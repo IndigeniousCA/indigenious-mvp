@@ -229,6 +229,6 @@ export class AuthService {
       .eq('id', userId)
       .single()
     
-    return data?.email || null
+    return (data as any)?.email || null
   }
 }
