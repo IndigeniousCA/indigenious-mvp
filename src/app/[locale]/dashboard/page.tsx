@@ -67,13 +67,14 @@ export default function DashboardPage() {
           return;
         }
 
-        setUserProfile(profile as UserProfile);
+        const typedProfile = profile as UserProfile;
+        setUserProfile(typedProfile);
 
         // Load dashboard stats based on user type
-        if (profile.user_type === 'indigenous_business') {
-          await loadIndigenousBusinessStats(user.id, profile.businesses?.[0]?.id);
+        if (typedProfile.user_type === 'indigenous_business') {
+          await loadIndigenousBusinessStats(user.id, typedProfile.businesses?.[0]?.id);
         } else {
-          await loadCanadianBusinessStats(user.id, profile.businesses?.[0]?.id);
+          await loadCanadianBusinessStats(user.id, typedProfile.businesses?.[0]?.id);
         }
 
         // Load recent activities
