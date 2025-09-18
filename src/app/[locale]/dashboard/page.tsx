@@ -13,6 +13,7 @@ interface UserProfile {
   user_type: 'indigenous_business' | 'canadian_business';
   subscription_tier: string;
   businesses?: {
+    id: string;
     business_name: string;
     indigenous_owned: boolean;
     verification_status: string;
