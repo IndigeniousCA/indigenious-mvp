@@ -195,7 +195,7 @@ export class AuthService {
     //   .from('verification_codes')
     //   .update({ used: true })
     //   .eq('id', data.id)
-    console.log('TODO: Mark verification code as used:', data.id)
+    console.log('TODO: Mark verification code as used:', (data as any).id)
 
     return true
   }
