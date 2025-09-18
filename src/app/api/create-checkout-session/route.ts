@@ -30,10 +30,10 @@ export async function POST(request: NextRequest) {
       .single();
     
     // Create or retrieve Stripe customer
-    let customerId = userProfile?.stripe_customer_id;
+    let customerId = (userProfile as any)?.stripe_customer_id;
     if (!customerId) {
       const customer = await stripe.customers.create({
-        email: userProfile?.email || user.email!,
+        email: (userProfile as any)?.email || user.email!,
         metadata: {
           supabaseUserId: user.id,
           userType: userType
