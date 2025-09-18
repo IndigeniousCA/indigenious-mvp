@@ -157,7 +157,7 @@ export class AuthService {
         code,
         type,
         expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString() // 10 minutes
-      })
+      } as any)
 
     // Send via email or SMS service
     if (type === 'email') {
