@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
       .eq('id', user.id)
       .single();
 
-    if (userProfile?.user_type !== 'indigenous_business') {
+    if ((userProfile as any)?.user_type !== 'indigenous_business') {
       return NextResponse.json({ 
         error: 'Only Indigenous businesses can search for partners' 
       }, { status: 403 });
