@@ -119,9 +119,9 @@ export class AuthService {
         .eq('id', authData.user.id)
         .single()
 
-      if (profile?.phone) {
+      if ((profile as any)?.phone) {
         // Send 2FA code
-        await this.sendVerificationCode(authData.user.id, profile.phone, 'sms')
+        await this.sendVerificationCode(authData.user.id, (profile as any).phone, 'sms')
         
         return {
           success: true,
