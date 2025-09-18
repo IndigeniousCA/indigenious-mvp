@@ -67,7 +67,7 @@ export class AuthService {
           open_to_partnership: data.userType === 'canadian_business',
           verification_status: 'pending',
           requires_payment: data.userType === 'canadian_business'
-        })
+        } as any)
 
       if (businessError) {
         console.error('Business creation error:', businessError)
