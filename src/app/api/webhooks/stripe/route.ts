@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
               subscription_status: 'active',
               stripe_subscription_id: session.subscription as string,
               updated_at: new Date().toISOString()
-            })
+            } as any)
             .eq('id', userId);
             
           // For Canadian businesses, mark as payment verified
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
               .update({
                 payment_verified: true,
                 verification_status: 'self_declared'
-              })
+              } as any)
               .eq('user_id', userId);
           }
         }
