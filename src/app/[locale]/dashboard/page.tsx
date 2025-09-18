@@ -67,12 +67,12 @@ export default function DashboardPage() {
           return;
         }
 
-        setUserProfile(profile);
+        setUserProfile(profile as UserProfile);
 
         // Load dashboard stats based on user type
-        if (profile.user_type === 'indigenous_business') {
+        if (profile?.user_type === 'indigenous_business') {
           await loadIndigenousBusinessStats(user.id, profile.businesses?.[0]?.id);
-        } else {
+        } else if (profile) {
           await loadCanadianBusinessStats(user.id, profile.businesses?.[0]?.id);
         }
 

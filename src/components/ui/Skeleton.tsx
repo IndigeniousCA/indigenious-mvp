@@ -14,3 +14,11 @@ export function Skeleton({ className }: SkeletonProps) {
     />
   );
 }
+
+export function PricingCardSkeleton() {
+  return <Skeleton className="h-96" />;
+}
+
+export function BusinessCardSkeleton() {
+  return <Skeleton className="h-64" />;
+}
