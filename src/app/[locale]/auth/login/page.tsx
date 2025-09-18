@@ -58,8 +58,16 @@ export default function LoginPage() {
     setIsLoading(true);
     
     try {
-      // Use real auth service
-      const result = await authService.login(formData);
+      // Call the API endpoint
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
       
       if (result.success) {
         setSuccess(result.message);

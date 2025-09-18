@@ -89,11 +89,19 @@ export default function RegisterPage() {
     setIsLoading(true);
     
     try {
-      // Use real auth service
-      const result = await authService.register({
-        ...formData,
-        userType: userType
+      // Call the API endpoint
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          userType: userType
+        })
       });
+
+      const result = await response.json();
       
       if (result.success) {
         setSuccess(result.message);
