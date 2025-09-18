@@ -48,7 +48,7 @@ export class AuthService {
           phone: data.phone,
           email: data.email,
           preferred_language: data.locale
-        })
+        } as any)
         .eq('id', authData.user.id)
 
       if (userError) {
@@ -190,7 +190,7 @@ export class AuthService {
     // Mark as used
     await this.supabase
       .from('verification_codes')
-      .update({ used: true })
+      .update({ used: true } as any)
       .eq('id', data.id)
 
     return true
