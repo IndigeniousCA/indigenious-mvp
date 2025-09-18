@@ -27,6 +27,14 @@ interface DashboardStats {
   indigenousParticipation: number;
 }
 
+interface AuditLog {
+  id: string;
+  user_id: string;
+  action: string;
+  details: any;
+  created_at: string;
+}
+
 export default function DashboardPage() {
   const locale = useLocale() as 'en' | 'fr';
   const router = useRouter();
@@ -152,7 +160,7 @@ export default function DashboardPage() {
         .limit(5);
 
       if (activities) {
-        const formattedActivities = activities.map((activity, index) => ({
+        const formattedActivities = activities.map((activity: AuditLog, index: number) => ({
           id: index + 1,
           type: activity.action === 'search_businesses' ? 'search' : 'profile',
           message: formatActivityMessage(activity.action, activity.details),
