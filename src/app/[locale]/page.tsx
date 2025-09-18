@@ -1,11 +1,16 @@
 import { Button } from '@/components/ui/Button';
 import { StatCard } from '@/components/ui/Card';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { Navigation } from '@/components/layout/Navigation';
 
-export default function Home() {
-  const t = useTranslations();
+interface PageProps {
+  params: Promise<{ locale: string }>;
+}
+
+export default async function Home({ params }: PageProps) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale });
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-between overflow-hidden">
