@@ -62,7 +62,7 @@ export default function DashboardPage() {
           .eq('id', user.id)
           .single();
 
-        if (profileError) {
+        if (profileError || !profile) {
           console.error('Error loading profile:', profileError);
           return;
         }
@@ -70,9 +70,9 @@ export default function DashboardPage() {
         setUserProfile(profile as UserProfile);
 
         // Load dashboard stats based on user type
-        if (profile?.user_type === 'indigenous_business') {
+        if (profile.user_type === 'indigenous_business') {
           await loadIndigenousBusinessStats(user.id, profile.businesses?.[0]?.id);
-        } else if (profile) {
+        } else {
           await loadCanadianBusinessStats(user.id, profile.businesses?.[0]?.id);
         }
 
